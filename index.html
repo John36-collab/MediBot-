@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medibot - AI-Driven Health Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ffffff 0%, #e3f2fd 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e88e5 0%, #1565c0 100%);
+            color: white;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        .auth-btn {
+            background: white;
+            color: #1e88e5;
+            padding: 0.6rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.3s;
+        }
+
+        .auth-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .hero {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            color: #1565c0;
+            margin-bottom: 1rem;
+            animation: fadeInDown 1s;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: #666;
+            margin-bottom: 2rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #1e88e5 0%, #1565c0 100%);
+            color: white;
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(30, 136, 229, 0.3);
+            transition: all 0.3s;
+            margin: 0.5rem;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(30, 136, 229, 0.4);
+        }
+
+        .features {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 2rem;
+        }
+
+        .features h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #1565c0;
+            margin-bottom: 3rem;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-left: 5px solid #1e88e5;
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+
+        .feature-card h3 {
+            color: #1565c0;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.8;
+        }
+
+        .feature-card button {
+            background: linear-gradient(135deg, #1e88e5 0%, #1565c0 100%);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 20px;
+            margin-top: 1rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.3s;
+        }
+
+        .feature-card button:hover {
+            transform: scale(1.05);
+        }
+
+        .ai-section {
+            background: linear-gradient(135deg, #bbdefb 0%, #e3f2fd 100%);
+            padding: 4rem 2rem;
+            margin: 4rem 0;
+        }
+
+        .ai-section h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #1565c0;
+            margin-bottom: 2rem;
+        }
+
+        .ai-chat-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+
+        .chat-box {
+            height: 400px;
+            overflow-y: auto;
+            padding: 2rem;
+            background: #f8f9fa;
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border-radius: 10px;
+            animation: fadeIn 0.3s;
+        }
+
+        .bot-message {
+            background: #e3f2fd;
+            border-left: 4px solid #1e88e5;
+        }
+
+        .user-message {
+            background: #fff;
+            border-left: 4px solid #4caf50;
+            margin-left: 2rem;
+        }
+
+        .chat-input-area {
+            display: flex;
+            padding: 1.5rem;
+            background: white;
+            border-top: 2px solid #e3f2fd;
+        }
+
+        .chat-input-area input {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid #e3f2fd;
+            border-radius: 25px;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .chat-input-area input:focus {
+            border-color: #1e88e5;
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, #1e88e5 0%, #1565c0 100%);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            margin-left: 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.3s;
+        }
+
+        .send-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 1rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        .typing-indicator.active {
+            display: block;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            animation: fadeIn 0.3s;
+        }
+
+        .modal-content {
+            background: white;
+            max-width: 450px;
+            margin: 5% auto;
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            animation: slideIn 0.3s;
+        }
+
+        .modal-content h2 {
+            color: #1565c0;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e3f2fd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #1e88e5;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #1e88e5 0%, #1565c0 100%);
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .close-modal {
+            float: right;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #999;
+            line-height: 1;
+        }
+
+        .close-modal:hover {
+            color: #333;
+        }
+
+        .toggle-form {
+            text-align: center;
+            margin-top: 1rem;
+            color: #666;
+        }
+
+        .toggle-form a {
+            color: #1e88e5;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        footer {
+            background: #000;
+            color: white;
+            padding: 3rem 2rem 1.5rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            color: #1e88e5;
+            margin-bottom: 1rem;
+        }
+
+        .footer-section p, .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: #1e88e5;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            display: inline-block;
+            color: white;
+            background: #1e88e5;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+
+        .social-links a:hover {
+            background: #1565c0;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #333;
+            color: #999;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: #1565c0;
+                padding: 1rem;
+                gap: 1rem;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                margin: 10% 1rem;
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 1rem;
+            }
+
+            .logo {
+                font-size: 1.4rem;
+            }
+
+            .hero {
+                margin: 2rem auto;
+                padding: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 1.7rem;
+            }
+
+            .cta-button {
+                padding: 0.8rem 1.5rem;
+                font-size: 1rem;
+            }
+
+            .features h2, .ai-section h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                🏥 Medibot
+            </div>
+            <button class="mobile-menu-btn" onclick="toggleMenu()">☰</button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#ai-assistant">AI Assistant</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <button class="auth-btn" onclick="openModal('login')">Login</button>
+        </nav>
+    </header>
+
+    <section class="hero" id="home">
+        <h1>AI-Driven Health Assistant for Communities</h1>
+        <p>Empowering communities with accessible health guidance, comprehensive symptom checking, and personalized wellness support through advanced AI technology.</p>
+        <button class="cta-button" onclick="openModal('signup')">Get Started</button>
+        <button class="cta-button" style="background: white; color: #1e88e5;" onclick="document.getElementById('ai-assistant').scrollIntoView({behavior: 'smooth'})">Try AI Assistant</button>
+    </section>
+
+    <section class="features" id="features">
+        <h2>Intelligent Health Features</h2>
+        <div class="feature-grid">
+            <div class="feature-card" onclick="triggerFeature('symptom')">
+                <h3>Universal Symptom Checker</h3>
+                <p>Advanced AI analyzes ANY symptom or health concern. Get comprehensive information about possible conditions, severity assessment, and recommended actions for over 50+ common and rare symptoms.</p>
+                <button>Check Symptoms</button>
+            </div>
+            <div class="feature-card" onclick="triggerFeature('tips')">
+                <h3>Personalized Health Guidance</h3>
+                <p>Receive customized advice on nutrition, fitness, mental wellness, chronic disease management, and preventive care tailored to your specific needs and health profile.</p>
+                <button>Get Health Tips</button>
+            </div>
+            <div class="feature-card" onclick="triggerFeature('reminder')">
+                <h3>Multi-Channel Reminders</h3>
+                <p>Never miss medications or appointments! Set reminders via WhatsApp, SMS, Email, Push Notifications, or Telegram. Supports international phone numbers with any country code.</p>
+                <button>Setup Reminders</button>
+            </div>
+            <div class="feature-card" onclick="triggerFeature('mental')">
+                <h3>Mental Health Support</h3>
+                <p>Compassionate AI for stress, anxiety, depression support. Access coping strategies, crisis resources, and a safe space to discuss mental wellness concerns 24/7.</p>
+                <button>Get Support</button>
+            </div>
+            <div class="feature-card" onclick="triggerFeature('whatsapp')">
+                <h3>Global WhatsApp Integration</h3>
+                <p>Connect from any country! Access instant health support directly through WhatsApp with automatic reminders, symptom checks, and emergency alerts in your local language.</p>
+                <button>Connect WhatsApp</button>
+            </div>
+            <div class="feature-card" onclick="triggerFeature('community')">
+                <h3>Community Health Impact</h3>
+                <p>Free healthcare guidance for underserved communities worldwide. Available 24/7 in multiple languages, reducing misinformation and supporting preventive care globally.</p>
+                <button>Learn More</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="ai-section" id="ai-assistant">
+        <h2>Talk to Your AI Health Assistant</h2>
+        <div class="ai-chat-container">
+            <div class="chat-box" id="chatBox">
+                <div class="message bot-message">
+                    <strong>Medibot:</strong> Hello!  I'm your AI health assistant with comprehensive medical knowledge.<br><br>
+                    <strong>I can help you with:</strong><br>
+                    🔍 ANY symptom or disease information<br>
+                     Medication guidance and reminders<br>
+                     Mental health support<br>
+                     Nutrition and fitness advice<br>
+                     Multi-channel reminders (WhatsApp, SMS, Email, Push, Telegram)<br>
+                     Emergency guidance<br><br>
+                    What would you like to know about today?
+                </div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="userInput" placeholder="Ask about any symptom, disease, or health concern..." onkeypress="if(event.key==='Enter') sendMessage()">
+                <button onclick="sendMessage()" class="send-btn">Send</button>
+            </div>
+        </div>
+    </section>
+
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            
+            <div id="loginForm">
+                <h2>Welcome Back</h2>
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="loginEmail" required placeholder="your.email@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="loginPassword" required placeholder="Enter your password">
+                    </div>
+                    <button type="submit" class="submit-btn">Login</button>
+                    <div class="toggle-form">
+                        Don't have an account? <a href="#" onclick="switchForm('signup')">Sign Up</a>
+                    </div>
+                </form>
+            </div>
+
+            <div id="signupForm" style="display: none;">
+                <h2>Create Account</h2>
+                <form onsubmit="handleSignup(event)">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="signupName" required placeholder="John Doe">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="signupEmail" required placeholder="your.email@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="signupPassword" required placeholder="Create a strong password">
+                    </div>
+                    <button type="submit" class="submit-btn">Sign Up</button>
+                    <div class="toggle-form">
+                        Already have an account? <a href="#" onclick="switchForm('login')">Login</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About Medibot</h3>
+                <p>AI-driven health assistant providing accessible, comprehensive healthcare guidance to communities worldwide with support for 50+ symptoms, diseases, and health conditions.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="#home">Home</a>
+                <a href="#features">Features</a>
+                <a href="#ai-assistant">AI Assistant</a>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Developer</h3>
+                <p>Nwafor John Chukwuebuka</p>
+                <div class="social-links">
+                    <a href="https://www.linkedin.com/in/john-chukwuebuka-054a522ba" target="_blank" title="LinkedIn">in</a>
+                    <a href="https://github.com/John36-collab" target="_blank" title="GitHub">⚡</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Medibot. Developed by Nwafor John Chukwuebuka | Good Health and Well-being</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script>
+        const SUPABASE_URL = 'https://juxmsblskfuscvusxlgz.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp1eG1zYmxza2Z1c2N2dXN4bGd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2Mjg3MDcsImV4cCI6MjA3NjIwNDcwN30.HMoLj4tj_hSa3jn8ypQ9Ptjit3LB_O6kG9p3ZTdyk2s';
+
+        let currentUser = null;
+        let conversationContext = {currentTopic: null, awaitingResponse: false, userData: {}, reminderSetup: {}};
+
+        const medicalDB = {
+            symptoms: {"fever":{"diseases":["Influenza","COVID-19","Malaria","Typhoid","Dengue","Pneumonia"],"advice":"Stay hydrated, rest, take fever reducers. Seek care if >103°F or persists >3 days.","emergency":["Difficulty breathing","Chest pain","Confusion","Severe headache with stiff neck"]},"headache":{"diseases":["Migraine","Tension Headache","Sinusitis","Meningitis"],"advice":"Rest in dark room, stay hydrated, OTC pain relievers may help.","emergency":["Sudden severe headache","Fever with stiff neck","Vision changes"]},"cough":{"diseases":["Common Cold","Bronchitis","Asthma","Pneumonia","COVID-19","Tuberculosis"],"advice":"Stay hydrated, use humidifier, avoid irritants.","emergency":["Coughing blood","Difficulty breathing","Chest pain"]},"chest pain":{"diseases":["Heart Attack","Angina","GERD","Panic Attack"],"advice":"EMERGENCY - Seek immediate care for chest pain.","emergency":["Pressure in chest","Pain to arm/jaw","Shortness of breath"]},"abdominal pain":{"diseases":["Appendicitis","Gastritis","IBS","Food Poisoning","Kidney Stones"],"advice":"Bland diet, stay hydrated. Seek care if severe.","emergency":["Severe sudden pain","Vomiting blood","Rigid abdomen"]},"diarrhea":{"diseases":["Food Poisoning","Gastroenteritis","IBS","Crohn's"],"advice":"Stay hydrated, eat bland foods, probiotics may help.","emergency":["Bloody stools","Severe dehydration","High fever"]},"fatigue":{"diseases":["Anemia","Thyroid Disorders","Depression","Sleep Apnea","Diabetes"],"advice":"Ensure adequate sleep, balanced diet, regular exercise.","emergency":["Extreme weakness","Fainting","Chest pain with fatigue"]},"shortness of breath":{"diseases":["Asthma","COPD","Pneumonia","Heart Failure","COVID-19"],"advice":"Sit upright, stay calm. Seek emergency care if severe.","emergency":["Bluish lips","Chest pain","Inability to speak"]},"nausea":{"diseases":["Gastroenteritis","Food Poisoning","Pregnancy","Migraine"],"advice":"Sip clear fluids, bland foods, ginger may help.","emergency":["Vomiting blood","Severe abdominal pain"]},"sore throat":{"diseases":["Viral Pharyngitis","Strep Throat","Tonsillitis","Mononucleosis"],"advice":"Gargle salt water, stay hydrated, throat lozenges.","emergency":["Difficulty swallowing/breathing","Drooling"]},"dizziness":{"diseases":["Vertigo","Low Blood Pressure","Anemia","Dehydration","Stroke"],"advice":"Sit/lie down immediately, stay hydrated.","emergency":["Chest pain","Severe headache","Vision changes"]},"rash":{"diseases":["Eczema","Allergic Reaction","Shingles","Measles"],"advice":"Keep clean, avoid scratching, antihistamines for itching.","emergency":["Difficulty breathing","Rapid spread","High fever"]}},
+            reminderChannels: {"whatsapp":"📱 WhatsApp - International numbers supported","sms":"💬 SMS - Global text messaging","email":"📧 Email - Instant notifications","push":"🔔 Push - Browser notifications","telegram":"✈️ Telegram - Secure messaging"}
+        };
+
+        async function generateAIResponse(msg) {
+            const lm = msg.toLowerCase();
+            
+            if(lm.match(/^(hi|hello|hey|good)/)) return "Hello! 👋 I'm Medibot, your comprehensive AI health assistant.\n\nI can help with:\n🔍 ANY symptom or disease\n💊 Medications & reminders\n🧠 Mental health support\n🥗 Nutrition & fitness\n📱 Multi-channel reminders\n\nWhat can I help you with?";
+            
+            if(['emergency','urgent','severe pain','chest pain',"can't breathe",'suicide','heart attack','stroke'].some(k=>lm.includes(k))) {
+                await saveHealthRecord({type:'emergency_alert',message:msg,timestamp:new Date().toISOString()});
+                return "🚨 MEDICAL EMERGENCY 🚨\n\nCALL EMERGENCY SERVICES:\n• USA/Canada: 911\n• UK: 999/112\n• EU: 112\n• Australia: 000\n• India: 112\n• Nigeria: 112/199\n\nSuicide/Crisis:\n• US: 988\n• International: findahelpline.com\n\nStay calm, don't leave alone, follow dispatcher instructions!";
+            }
+            
+            let detectedSymptoms = [];
+            for(let s in medicalDB.symptoms) {
+                if(lm.includes(s) || (s==="shortness of breath"&&lm.includes("breath")) || (s==="abdominal pain"&&(lm.includes("stomach")||lm.includes("belly"))) || (s==="sore throat"&&lm.includes("throat"))) {
+                    detectedSymptoms.push(s);
+                }
+            }
+            
+            if(detectedSymptoms.length>0) {
+                let r = "I understand you're experiencing **"+detectedSymptoms.join(", ")+"**. Here's comprehensive information:\n\n";
+                detectedSymptoms.forEach(s=>{
+                    const si = medicalDB.symptoms[s];
+                    r += `📋 **${s.toUpperCase()}**\n\n**Possible conditions:** ${si.diseases.join(", ")}\n\n**Advice:** ${si.advice}\n\n⚠️ **Seek immediate care if:**\n${si.emergency.map(e=>'• '+e).join('\n')}\n\n`;
+                });
+                r += "**Remember:** This is general info, not diagnosis. Consult healthcare provider when in doubt.\n\nWould you like to set a reminder to monitor symptoms?";
+                await saveHealthRecord({type:'symptom_check',symptoms:detectedSymptoms,message:msg,timestamp:new Date().toISOString()});
+                return r;
+            }
+            
+            if(lm.includes('remind')||lm.includes('reminder')||lm.includes('notification')) {
+                let r = "📅 **MULTI-CHANNEL REMINDER SETUP**\n\nAvailable channels:\n\n";
+                for(let c in medicalDB.reminderChannels) r += medicalDB.reminderChannels[c]+"\n";
+                r += "\n**Setup Format:**\n'Remind me to [action] on [channel] at [contact] at [time]'\n\n**Examples:**\n• 'Remind me to take insulin on WhatsApp at +234-803
